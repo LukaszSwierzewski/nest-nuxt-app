@@ -6028,6 +6028,7 @@
     @media (min-width: 979px) {
     #menu_search .menu_search__mobile:before, #menu_search .menu_search__submit:before {
       content:url('https://sklep.sport-max.pl/data/include/cms/NOWYSPORT-2/bannery/szukajka.svg') !important;
+      transform: scale(0.85);
     }
     #menu_search .menu_search__block {
       width: 100%;
