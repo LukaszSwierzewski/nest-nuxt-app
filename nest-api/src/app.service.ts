@@ -4,6 +4,4 @@ import { Repository } from 'typeorm';
 import { User } from './users/user.entity';
 @Injectable()
 export class AppService {
-  constructor(@InjectRepository(User) private usersRepository: Repository<User>) {
-  }
 }
