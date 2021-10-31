@@ -12,6 +12,7 @@
       <p>{{ user }}</p>
       <button @click="login">Login</button>
     </div>
+    <button @click="privateRoute">isAuth</button>
   </div>
 </template>
 <script>
@@ -34,6 +35,10 @@ export default {
     store.dispatch("users/add", users.data);
   },
   methods: {
+    async privateRoute() {
+      const privateRoute = await usersService.getPrivateRoute();
+      return privateRoute;
+    },
     async login() {
       const user = await authService.login();
       this.user = user.data;

@@ -2,8 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request }
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { LocalAuthGuard } from 'src/auth/local-auth.guard';
-
+import { LocalAuthGuard } from '../auth/local-auth.guard';
+import { AuthenticatedGuard } from '../auth/authenticated.guard'
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -26,6 +26,11 @@ export class UsersController {
   @Post('login')
   login(@Request() req): any {
     return req.user;
+  }
+  @UseGuards(AuthenticatedGuard)
+  @Get('/protected/route')
+  getHell(): string {
+    return 'from protected route'
   }
  
   // @Patch(':id')
