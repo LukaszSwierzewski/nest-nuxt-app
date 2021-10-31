@@ -24,6 +24,11 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
+    <br>
+    <br>
+    <br>
+    <br>
+    <p>kurwa {{ user }}</p>
     <v-app-bar
       :clipped-left="clipped"
       fixed
@@ -89,9 +94,21 @@
 </template>
 
 <script>
+import authService from "../api/auth";
 export default {
+  async created() {
+    authService.checkSessionExpire().then((response) => {
+      console.log(response);
+      if (response.data.status === 401) {
+        console.log("expired");
+      } else {
+        this.user = response.data;
+      }
+    });
+  },
   data() {
     return {
+      user: null,
       clipped: false,
       drawer: false,
       fixed: false,

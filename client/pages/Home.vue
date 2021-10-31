@@ -5,13 +5,14 @@
       <div>
         <ul>
           <li v-for="user in users" :key='user.id'>
-            {{ user.name }}
+            {{ user.username }}
           </li>
         </ul>
       </div>
       <p>{{ user }}</p>
       <button @click="login">Login</button>
     </div>
+    <button @click="privateRoute">isAuth</button>
   </div>
 </template>
 <script>
@@ -34,10 +35,19 @@ export default {
     store.dispatch("users/add", users.data);
   },
   methods: {
+    async privateRoute() {
+      const privateRoute = await usersService.getPrivateRoute();
+      return privateRoute;
+    },
     async login() {
-      const user = await authService.login();
-      this.user = user.data;
-      return user;
+      try {
+        const user = await authService.login();
+        await authService.setupSession(user.data);
+        this.user = user.data;
+        return user;
+      } catch {
+        throw new Error();
+      }
     },
   },
 };
