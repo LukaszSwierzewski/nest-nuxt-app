@@ -17,8 +17,9 @@ export class UsersService {
     return allUsers
   }
 
-  findOne(id: number) {
-    const oneUser = this.usersRepository.findOneOrFail(id)
+
+  findOne(username: string) {
+    const oneUser = this.usersRepository.findOneOrFail({username})
     return oneUser
   }
 

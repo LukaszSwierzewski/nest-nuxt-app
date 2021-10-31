@@ -8,7 +8,7 @@ const config: MysqlConnectionOptions = {
     password: '',
     database: 'local_db',
     entities: ['dist/src/**/*.entity.js'],
-    synchronize: false
+    synchronize: true
 }
 
 export default config;

@@ -9,15 +9,20 @@
           </li>
         </ul>
       </div>
+      <p>{{ user }}</p>
+      <button @click="login">Login</button>
     </div>
   </div>
 </template>
 <script>
 import usersService from "../api/users";
+import authService from "../api/auth";
 import { mapState } from "vuex";
 export default {
   data() {
-    return {};
+    return {
+      user: null,
+    };
   },
   computed: {
     ...mapState({
@@ -27,6 +32,13 @@ export default {
   async asyncData({ store }) {
     const users = await usersService.getAll();
     store.dispatch("users/add", users.data);
+  },
+  methods: {
+    async login() {
+      const user = await authService.login();
+      this.user = user.data;
+      return user;
+    },
   },
 };
 </script>
