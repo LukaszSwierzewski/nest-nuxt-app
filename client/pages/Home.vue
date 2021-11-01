@@ -5,7 +5,7 @@
       <div>
         <ul>
           <li v-for="user in users" :key='user.id'>
-            {{ user.name }}
+            {{ user.username }}
           </li>
         </ul>
       </div>
@@ -40,9 +40,14 @@ export default {
       return privateRoute;
     },
     async login() {
-      const user = await authService.login();
-      this.user = user.data;
-      return user;
+      try {
+        const user = await authService.login();
+        await authService.setupSession(user.data);
+        this.user = user.data;
+        return user;
+      } catch {
+        throw new Error();
+      }
     },
   },
 };

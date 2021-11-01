@@ -11,7 +11,7 @@ async function bootstrap() {
       secret: "keyboard cat", // put in env later
       resave: false,
       saveUninitialized: false,
-      cookie: {maxAge: 360000}
+      cookie: {maxAge: 20000}
     })
   )
   app.use(cookieParser())
