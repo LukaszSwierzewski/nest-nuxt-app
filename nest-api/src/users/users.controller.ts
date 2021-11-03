@@ -25,7 +25,11 @@ export class UsersController {
   password: string;
   @Get()
   async create(@Body() createUserDto: CreateUserDto) {
-    const user = await this.usersService.create({username: "someeeUser", email: 'haba@o2.pl', password: "asd"});
+    const user = await this.usersService.create({
+      username: 'someeeUser',
+      email: 'haba@o2.pl',
+      password: 'asd',
+    });
     return this.login(user);
   }
 
