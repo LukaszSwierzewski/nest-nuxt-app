@@ -26,18 +26,19 @@ export class NewsService extends Validations {
   async findAllAndPaginate(
     paginationDto: PaginationDto,
   ): Promise<PaginatedNewsDto> {
-    const skippedItems = (paginationDto.page - 1) * paginationDto.limit;
+    const limit = 6;
+    const skippedItems = (paginationDto.page - 1) * limit;
     const totalCount = await this.newsRepository.count();
     const news = await this.newsRepository
       .createQueryBuilder()
       .orderBy('created_at', 'DESC')
       .offset(skippedItems)
-      .limit(paginationDto.limit)
+      .limit(limit)
       .getMany();
     return {
       totalCount,
       page: paginationDto.page,
-      limit: paginationDto.limit,
+      limit: limit,
       data: news,
     };
   }

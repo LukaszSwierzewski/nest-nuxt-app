@@ -27,10 +27,8 @@ export class NewsController {
     @Query() paginationDto: PaginationDto,
   ): Promise<PaginatedNewsDto> {
     paginationDto.page = Number(paginationDto.page);
-    paginationDto.limit = Number(paginationDto.limit);
     return this.newsService.findAllAndPaginate({
       ...paginationDto,
-      limit: paginationDto.limit > 6 ? 6 : paginationDto.limit,
     });
   }
   @Get()
