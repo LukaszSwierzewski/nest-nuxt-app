@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { request } from 'express';
 import { UsersService } from '../users/users.service';
 
 @Injectable()
@@ -11,11 +10,8 @@ export class AuthService {
             const { password, ...rest}  = user
             return rest
         } else {
-            return 'Wrong password or username'
+            return 'Wrong password or username. Try again'
         }
-    }
-    async validateCookie (cookie: string): Promise<any> {
-        console.log(request)
     }
 
 }
