@@ -3,8 +3,8 @@ import API from "./axios-setup";
 export default {
   login(userParams) {
     const user = {
-      username: "test",
-      password: "12345"
+      username: "someUser",
+      password: "HABA"
     };
     return API().post("/users/login", user);
   },

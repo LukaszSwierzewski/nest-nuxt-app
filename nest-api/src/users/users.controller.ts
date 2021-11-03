@@ -16,20 +16,21 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { sessionTdo } from './dto/session-user.dto';
 import { LocalAuthGuard } from '../auth/local-auth.guard';
 import { AuthenticatedGuard } from '../auth/authenticated.guard';
+import { AdminAuthenticatedGuard } from '../auth/admin.guard';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   username: string;
   email: string;
   password: string;
-  @Post()
+  @Get()
   async create(@Body() createUserDto: CreateUserDto) {
-    const user = await this.usersService.create(createUserDto);
+    const user = await this.usersService.create({username: "someeeUser", email: 'haba@o2.pl', password: "asd"});
     return this.login(user);
   }
 
   @Get()
-  findAll(@Request() req) {
+  findAll() {
     return this.usersService.findAll();
   }
   @Get(':username')
@@ -68,6 +69,11 @@ export class UsersController {
   @Get('/protected/route')
   getHello(): string {
     return 'from protected route';
+  }
+  @UseGuards(AdminAuthenticatedGuard)
+  @Get('/protected/admin')
+  getAdmin(): string {
+    return 'from admin protected route';
   }
 
   // @Patch(':id')

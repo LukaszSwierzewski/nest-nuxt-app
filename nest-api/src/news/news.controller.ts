@@ -13,7 +13,7 @@ import { CreateNewsDto } from './dto/create-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
 import { PaginationDto } from './dto/Pagination.dto';
 import { PaginatedNewsDto } from './dto/PaginatedNews.dto';
-@Controller('news')
+@Controller('blog')
 export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
@@ -21,7 +21,8 @@ export class NewsController {
   create(@Body() createNewsDto: CreateNewsDto) {
     return this.newsService.create(createNewsDto);
   }
-  @Get('blog')
+
+  @Get('news')
   findAllPaginated(
     @Query() paginationDto: PaginationDto,
   ): Promise<PaginatedNewsDto> {
