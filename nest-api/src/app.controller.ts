@@ -6,6 +6,6 @@ export class AppController {
 
   @Get()
   mainPage() {
-      return 'this is mainPage'
+    return 'this is mainPage';
   }
 }

@@ -1,10 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, UnauthorizedException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Request,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { sessionTdo } from './dto/session-user.dto'
+import { sessionTdo } from './dto/session-user.dto';
 import { LocalAuthGuard } from '../auth/local-auth.guard';
-import { AuthenticatedGuard } from '../auth/authenticated.guard'
+import { AuthenticatedGuard } from '../auth/authenticated.guard';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -14,7 +25,7 @@ export class UsersController {
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const user = await this.usersService.create(createUserDto);
-    return this.login(user)
+    return this.login(user);
   }
 
   @Get()
@@ -31,16 +42,24 @@ export class UsersController {
     return req.user;
   }
   @Post('/check/session')
-  async setSession(@Body() sessionDto: sessionTdo, @Request() req): Promise<any> {
-    await this.usersService.updateSessionID(sessionDto.id, req.cookies['connect.sid'])
-    return 'request done'
+  async setSession(
+    @Body() sessionDto: sessionTdo,
+    @Request() req,
+  ): Promise<any> {
+    await this.usersService.updateSessionID(
+      sessionDto.id,
+      req.cookies['connect.sid'],
+    );
+    return 'request done';
   }
   @Get('/check/me')
   async checkUser(@Request() req): Promise<any> {
     if (req.cookies['connect.sid']) {
-      const user = await this.usersService.findUserByCookie(req.cookies['connect.sid'])
-      const { password, ...rest}  = user
-      return rest
+      const user = await this.usersService.findUserByCookie(
+        req.cookies['connect.sid'],
+      );
+      const { password, ...rest } = user;
+      return rest;
     } else {
       return new UnauthorizedException();
     }
@@ -48,9 +67,9 @@ export class UsersController {
   @UseGuards(AuthenticatedGuard)
   @Get('/protected/route')
   getHello(): string {
-    return 'from protected route'
+    return 'from protected route';
   }
- 
+
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
   //   return this.usersService.update(+id, updateUserDto);
