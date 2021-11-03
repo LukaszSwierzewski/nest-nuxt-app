@@ -98,7 +98,6 @@ import authService from "../api/auth";
 export default {
   async created() {
     authService.checkSessionExpire().then((response) => {
-      console.log(response);
       if (response.data.status === 401) {
         console.log("expired");
       } else {

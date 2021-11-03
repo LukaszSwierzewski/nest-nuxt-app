@@ -10,4 +10,6 @@ export class User {
     email: string;
     @Column()
     password: string;
+    @Column({nullable: true})
+    session_id: string;
 }
