@@ -4,7 +4,10 @@ export default {
   getAll() {
     return API().get("/users");
   },
-  getUserInfo() {
-    return API().get("/users/protected/route");
+  userInfoRoute() {
+    return API().get("/users/protected/account");
+  },
+  adminInfoRoute() {
+    return API().get("/users/protected/admin");
   }
 };

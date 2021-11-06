@@ -22,13 +22,40 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
+        <span v-if='user.isAuth'>
+          <v-list-item
+            v-for="(item, i) in protectedRoute"
+            :key="i"
+            :to="item.to"
+            router
+            exact
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title" />
+            </v-list-item-content>
+          </v-list-item>
+        </span>
+        <span v-if='user.isAdmin'>
+          <v-list-item
+            v-for="(item, i) in adminProtectedRoute"
+            :key="i"
+            :to="item.to"
+            router
+            exact
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title" />
+            </v-list-item-content>
+          </v-list-item>
+        </span>
       </v-list>
     </v-navigation-drawer>
-    <br>
-    <br>
-    <br>
-    <br>
-    <p>kurwa {{ user }}</p>
     <v-app-bar
       :clipped-left="clipped"
       fixed
@@ -131,6 +158,25 @@ export default {
           icon: "mdi-apps",
           title: "Home",
           to: "/home",
+        },
+        {
+          icon: "mdi-apps",
+          title: "blog",
+          to: "/blog/news?page=1",
+        },
+      ],
+      protectedRoute: [
+        {
+          icon: "mdi-apps",
+          title: "guard route",
+          to: "/account",
+        },
+      ],
+      adminProtectedRoute: [
+        {
+          icon: "mdi-apps",
+          title: "admin guard route",
+          to: "/account/admin",
         },
       ],
       miniVariant: false,

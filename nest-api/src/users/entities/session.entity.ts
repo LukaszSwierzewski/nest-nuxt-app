@@ -5,7 +5,9 @@ export class Session {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  session_id: string;
+  session_cookie: string;
+  @Column()
+  user_id: number;
   @ManyToOne((type) => User, (user) => user.sessions)
-  session_cookie: User;
+  session_user: User;
 }

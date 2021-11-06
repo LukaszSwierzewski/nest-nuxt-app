@@ -23,7 +23,7 @@ export class User {
   created_at: Date;
   @UpdateDateColumn()
   updated_at: Date;
-  @OneToMany((type) => Session, (session) => session.session_cookie, {
+  @OneToMany((type) => Session, (session) => session.session_user, {
     cascade: true
   })
   sessions: Session[];

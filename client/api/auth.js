@@ -10,6 +10,9 @@ export default {
   login(userParams) {
     return API().post("/users/login", userParams);
   },
+  logout() {
+    return API().post("/users/logout");
+  },
   setupSession(ID) {
     return API().post("/users/check/session", ID);
   },

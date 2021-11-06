@@ -32,7 +32,6 @@ export default {
     },
   },
   async asyncData({ store, route }) {
-    console.log("halo");
     const blogs = await blogService.getPage(route.query);
     store.dispatch("news/getBlogPage", blogs.data);
   },
