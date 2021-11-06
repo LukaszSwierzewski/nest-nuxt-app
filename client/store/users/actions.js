@@ -1,7 +1,8 @@
 import types from "./mutations-types";
 
 export default {
-  add({ commit }, payload) {
-    commit(types.GET_ALL_USERS, payload);
+  me({ commit }, payload) {
+    console.log(payload);
+    commit(types.GET_USER_INFO, payload);
   }
 };

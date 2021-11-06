@@ -1,12 +1,14 @@
 import API from "./axios-setup";
 
 export default {
+  register(userParams) {
+    return API().post("/users", userParams);
+  },
+  sessionAfterLogin(userParams) {
+    return API().post("/users/set/session", userParams);
+  },
   login(userParams) {
-    const user = {
-      username: "someUser",
-      password: "HABA"
-    };
-    return API().post("/users/login", user);
+    return API().post("/users/login", userParams);
   },
   setupSession(ID) {
     return API().post("/users/check/session", ID);

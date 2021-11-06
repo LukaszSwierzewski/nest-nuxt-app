@@ -1,7 +1,8 @@
 import types from "./mutations-types";
 
 export default {
-  [types.GET_ALL_USERS] (state, payload) {
-    state.users = payload
+  [types.GET_USER_INFO](state, payload) {
+    console.log(payload);
+    state.user = payload;
   }
 };

@@ -95,19 +95,24 @@
 
 <script>
 import authService from "../api/auth";
+import { mapState } from "vuex";
 export default {
   async created() {
     authService.checkSessionExpire().then((response) => {
       if (response.data.status === 401) {
         console.log("expired");
       } else {
-        this.user = response.data;
+        this.$store.dispatch("users/me", response.data);
       }
     });
   },
+  computed: {
+    ...mapState({
+      user: (state) => state.users.user,
+    }),
+  },
   data() {
     return {
-      user: null,
       clipped: false,
       drawer: false,
       fixed: false,

@@ -17,19 +17,14 @@ import { sessionTdo } from './dto/session-user.dto';
 import { LocalAuthGuard } from '../auth/local-auth.guard';
 import { AuthenticatedGuard } from '../auth/authenticated.guard';
 import { AdminAuthenticatedGuard } from '../auth/admin.guard';
+import { request } from 'express';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-  username: string;
-  email: string;
-  password: string;
-  @Get()
+
+  @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    const user = await this.usersService.create({
-      username: 'someeeUser',
-      email: 'haba@o2.pl',
-      password: 'asd',
-    });
+    const user = await this.usersService.create(createUserDto);
     return this.login(user);
   }
 
@@ -46,33 +41,45 @@ export class UsersController {
   async login(@Request() req): Promise<any> {
     return req.user;
   }
+  @Post('/set/session')
+  async postSession (
+    @Request() req
+  ): Promise<any> {
+    const user = await this.usersService.createNewSession(req.body.id, req.cookies['connect.sid']);
+    return 'user data updated'
+  }
   @Post('/check/session')
   async setSession(
     @Body() sessionDto: sessionTdo,
     @Request() req,
   ): Promise<any> {
-    await this.usersService.updateSessionID(
-      sessionDto.id,
-      req.cookies['connect.sid'],
-    );
-    return 'request done';
+    const session = await this.usersService.checkSessionExist('random');
+    if (session) {
+      console.log(session);
+      await this.usersService.updateSessionID(
+        session.id,
+        req.cookies['connect.sid'],
+      )
+    } else {
+      console.log('no session');
+    }
   }
   @Get('/check/me')
   async checkUser(@Request() req): Promise<any> {
-    if (req.cookies['connect.sid']) {
-      const user = await this.usersService.findUserByCookie(
-        req.cookies['connect.sid'],
-      );
-      const { password, ...rest } = user;
-      return rest;
+    if (req.user) {
+      return req.user
     } else {
-      return new UnauthorizedException();
+      return 'User logout'
     }
   }
   @UseGuards(AuthenticatedGuard)
   @Get('/protected/route')
-  getHello(): string {
-    return 'from protected route';
+  getHello(@Request() req): string {
+    if (req.user) {
+      return req.user
+    } else {
+      return 'loggedout'
+    }
   }
   @UseGuards(AdminAuthenticatedGuard)
   @Get('/protected/admin')

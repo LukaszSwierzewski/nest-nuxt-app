@@ -4,7 +4,7 @@ export default {
   getAll() {
     return API().get("/users");
   },
-  getPrivateRoute() {
+  getUserInfo() {
     return API().get("/users/protected/route");
   }
 };

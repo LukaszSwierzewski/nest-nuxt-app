@@ -4,8 +4,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
-
+import { Session } from './session.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -18,10 +19,12 @@ export class User {
   email: string;
   @Column()
   password: string;
-  @Column({ nullable: true })
-  session_id: string;
   @CreateDateColumn()
   created_at: Date;
   @UpdateDateColumn()
   updated_at: Date;
+  @OneToMany((type) => Session, (session) => session.session_cookie, {
+    cascade: true
+  })
+  sessions: Session[];
 }

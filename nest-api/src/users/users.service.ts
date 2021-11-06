@@ -2,35 +2,63 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { Session } from './entities/session.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(Session) private sessionRepository: Repository<Session>,
   ) {}
-  create(createUserDto: CreateUserDto): Promise<User> {
-    const newUser = this.usersRepository.create(createUserDto);
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const newUser = await this.usersRepository.create(createUserDto);
+    const afterLoginCookie = await this.sessionRepository.create({'session_id': 'random'})
+    await this.sessionRepository.save(afterLoginCookie)
+    newUser.sessions = [afterLoginCookie]
     return this.usersRepository.save(newUser);
   }
-
+  async createNewSession(id: string, cookie: any): Promise<any> {
+    const userUpdated = await this.usersRepository.findOneOrFail(id)
+    const afterLoginCookie = await this.sessionRepository.create({'session_id': cookie})
+    userUpdated.sessions = await this.findAllSession(userUpdated.id)
+    await userUpdated.sessions.push(afterLoginCookie)
+    
+    return this.usersRepository.save(userUpdated)
+  }
+  async findAllSession(userId: number): Promise<any> {
+    const session = await this.sessionRepository.find({
+      relations: ['session_cookie'],
+      loadRelationIds: true,
+      where: {
+        session_cookie: userId
+      }
+    })
+    return session
+  }
   findAll() {
     const allUsers = this.usersRepository.find();
     return allUsers;
   }
-
   findOne(username: string) {
     const oneUser = this.usersRepository.findOneOrFail({ username });
     return oneUser;
   }
   async findUserByCookie(session_id: string): Promise<any> {
-    const oneUser = this.usersRepository.findOneOrFail({ session_id });
-    return oneUser;
-  }
-
-  async updateSessionID(id: number, data: any) {
-    await this.usersRepository.update(+id, {
-      session_id: data,
+    const oneUser = await this.sessionRepository.findOneOrFail({session_id}, {
+      relations: ['session_cookie']
     });
+    const userData = oneUser.session_cookie 
+    const {password, ...rest} = userData
+    return rest;
+  }
+  async checkSessionExist(session_id: string): Promise<Session> {
+    const foundSession = this.sessionRepository.findOneOrFail({ session_id });
+    return foundSession;
+  }
+  async updateSessionID(id: number, data: any): Promise<any> {
+    await this.sessionRepository.update(+id, {
+        session_id: data
+      });
   }
 
   remove(id: number) {

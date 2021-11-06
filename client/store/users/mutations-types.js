@@ -1,4 +1,4 @@
 const types = {
-  GET_ALL_USERS: "/GET_ALL_USERS"
+  GET_USER_INFO: "/GET_ALL_USERS"
 };
-export default types
+export default types;

@@ -10,7 +10,7 @@
         </ul>
       </div>
       <p>{{ user }}</p>
-      <button @click="login">Login</button>
+      <button @click="loginCheck">Register</button>
     </div>
     <button @click="privateRoute">isAuth</button>
   </div>
@@ -27,26 +27,44 @@ export default {
   },
   computed: {
     ...mapState({
-      users: (state) => state.users.users,
+      users: (state) => state.users.user,
     }),
   },
   async asyncData({ store }) {
     const users = await usersService.getAll();
     store.dispatch("users/add", users.data);
   },
+  async created() {
+    const privateRoute = await usersService.getUserInfo();
+    this.user = privateRoute.data;
+  },
   methods: {
-    async privateRoute() {
-      const privateRoute = await usersService.getPrivateRoute();
-      return privateRoute;
-    },
-    async login() {
+    async register() {
       try {
-        const user = await authService.login();
-        await authService.setupSession(user.data);
-        this.user = user.data;
-        return user;
-      } catch {
-        throw new Error();
+        await authService.register(user);
+        const userLogin = await authService.login(user);
+        await authService.setupSession(userLogin);
+        this.user = userLogin.data;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async privateRoute() {
+      const privateRoute = await usersService.getUserInfo();
+      this.user = privateRoute;
+    },
+    async loginCheck() {
+      try {
+        const user = {
+          username: "lukasz",
+          password: "12345",
+        };
+        const userLogin = await authService.login(user);
+        console.log(userLogin);
+        const userData = await authService.sessionAfterLogin(userLogin);
+        console.log(userData);
+      } catch (err) {
+        console.log(err);
       }
     },
   },
