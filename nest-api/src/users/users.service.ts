@@ -12,7 +12,6 @@ export class UsersService {
   ) {}
   async create(createUserDto: CreateUserDto): Promise<User> {
     const newUser = await this.usersRepository.create(createUserDto);
-    const randomID = String(Math.random() * 1000)
     const randomUserID = Math.random() * 1000
     const afterLoginCookie = await this.sessionRepository.create({'session_cookie': 'secret_random', 'user_id': randomUserID})
     await this.sessionRepository.save(afterLoginCookie)
@@ -26,12 +25,11 @@ export class UsersService {
     if (currentSessionExist !== undefined) {
       return
     }
-
-    const afterLoginCookie = await this.sessionRepository.create({'session_cookie': cookie, 'user_id': userUpdated.id})
-    userUpdated.sessions = await this.findAllSession(userUpdated.id)
-    await userUpdated.sessions.push(afterLoginCookie)
-    
-    return this.usersRepository.save(userUpdated)
+    const afterLoginCookie = new Session ();
+    afterLoginCookie.session_cookie = cookie
+    afterLoginCookie.user_id = userUpdated.id
+    afterLoginCookie.session_user = userUpdated
+    return this.sessionRepository.save(afterLoginCookie)
   }
   async findAllSession(userId: number): Promise<any> {
     const session = await this.sessionRepository.find({

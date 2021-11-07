@@ -48,7 +48,9 @@ export class NewsService extends Validations {
   }
 
   findOne(page_link: string) {
-    const oneUser = this.newsRepository.findOneOrFail({ page_link });
+    const oneUser = this.newsRepository.findOneOrFail({ page_link }, {
+      relations: ['comments'],
+    });
     return oneUser;
   }
 
