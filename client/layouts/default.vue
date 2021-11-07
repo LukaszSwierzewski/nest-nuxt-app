@@ -22,7 +22,7 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
-        <span v-if='user.isAuth'>
+        <span v-if='user && user.isAuth'>
           <v-list-item
             v-for="(item, i) in protectedRoute"
             :key="i"
@@ -38,7 +38,7 @@
             </v-list-item-content>
           </v-list-item>
         </span>
-        <span v-if='user.isAdmin'>
+        <span v-if='user && user.isAdmin'>
           <v-list-item
             v-for="(item, i) in adminProtectedRoute"
             :key="i"

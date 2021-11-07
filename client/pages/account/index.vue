@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-row justify="center" align="center">
+        <v-row v-if='user && user.isAuth' v justify="center" align="center">
             <h2>From protected route</h2>
         </v-row>
     </div>
@@ -8,10 +8,16 @@
 
 <script>
 import userService from "../../api/users";
+import { mapGetters } from "vuex";
 export default {
-  async beforeRouteEnter(to, from, next) {
+  computed: {
+    ...mapGetters({
+      user: "users/user",
+    }),
+  },
+  async created() {
     const routeGuard = await userService.userInfoRoute();
-    next();
+    return routeGuard;
   },
 };
 </script>

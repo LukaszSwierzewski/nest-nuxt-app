@@ -9,9 +9,8 @@
 <script>
 import userService from "../../api/users";
 export default {
-  async beforeRouteEnter(to, from, next) {
+  async created() {
     const routeGuard = await userService.adminInfoRoute();
-    next();
   },
 };
 </script>

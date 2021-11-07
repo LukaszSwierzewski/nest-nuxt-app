@@ -69,7 +69,7 @@ export class UsersController {
         req.user.id
       )
     } else {
-      console.log('no session');
+      throw new Error
     }
   }
   @Get('/check/me')

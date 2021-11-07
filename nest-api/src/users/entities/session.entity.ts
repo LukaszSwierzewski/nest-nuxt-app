@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
 @Entity()
 export class Session {
@@ -8,6 +8,8 @@ export class Session {
   session_cookie: string;
   @Column()
   user_id: number;
+  @CreateDateColumn()
+  created_at: Date;
   @ManyToOne((type) => User, (user) => user.sessions)
   session_user: User;
 }
