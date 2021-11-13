@@ -22,22 +22,6 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
-        <span v-if='user && user.isAuth'>
-          <v-list-item
-            v-for="(item, i) in protectedRoute"
-            :key="i"
-            :to="item.to"
-            router
-            exact
-          >
-            <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title v-text="item.title" />
-            </v-list-item-content>
-          </v-list-item>
-        </span>
         <span v-if='user && user.isAdmin'>
           <v-list-item
             v-for="(item, i) in adminProtectedRoute"
@@ -62,31 +46,14 @@
       app
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
       <v-btn
-        icon
+        class="acount__btn"
         @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>mdi-menu</v-icon>
+      > 
+        <p v-if='user && user.username'>Hi, {{ user.username }}</p>
+        <v-icon>mdi-account</v-icon>
       </v-btn>
     </v-app-bar>
     <v-main>
@@ -101,14 +68,33 @@
       fixed
     >
       <v-list>
-        <v-list-item @click.native="right = !right">
+        <v-list-item
+          exact
+          @click="logout"
+        >
           <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
+            <v-icon>mdi-logout</v-icon>
           </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
+          <v-list-item-content>
+            <v-list-item-title v-text="'logout'" />
+          </v-list-item-content>
         </v-list-item>
+        <span v-if='user && user.isAuth'>
+          <v-list-item
+            v-for="(item, i) in protectedRoute"
+            :key="i"
+            :to="item.to"
+            router
+            exact
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title" />
+            </v-list-item-content>
+          </v-list-item>
+        </span>
       </v-list>
     </v-navigation-drawer>
     <v-footer
@@ -143,21 +129,23 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
+      accountItems: [
+        {
+          icon: "mdi-log-out",
+          title: "Welcome",
+          to: "/",
+        },
+      ],
       items: [
         {
           icon: "mdi-apps",
-          title: "Welcome",
+          title: "Home",
           to: "/",
         },
         {
           icon: "mdi-chart-bubble",
-          title: "Inspire",
-          to: "/inspire",
-        },
-        {
-          icon: "mdi-apps",
-          title: "Home",
-          to: "/home",
+          title: "Login/register",
+          to: "/login",
         },
         {
           icon: "mdi-apps",
@@ -182,8 +170,25 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: "Vuetify.js",
+      title: "My app",
     };
+  },
+  methods: {
+    async logout() {
+      await authService.logout();
+      this.$store.dispatch("users/logout", []);
+      this.$router.push({ path: "/" });
+    },
   },
 };
 </script>
+<style lang='scss'>
+.acount__btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  p {
+    margin: 0px;
+  }
+}
+</style>
