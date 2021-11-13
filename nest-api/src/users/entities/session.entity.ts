@@ -6,8 +6,6 @@ export class Session {
   id: number;
   @Column()
   session_cookie: string;
-  @Column()
-  user_id: number;
   @CreateDateColumn()
   created_at: Date;
   @ManyToOne((type) => User, (user) => user.sessions)

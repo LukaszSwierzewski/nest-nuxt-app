@@ -36,9 +36,9 @@ export class NewsController {
     return this.newsService.findAll();
   }
 
-  @Get(':slug')
-  findOne(@Param('slug') slug: string) {
-    return this.newsService.findOne(slug);
+  @Get(':page_link')
+  findOne(@Param('page_link') page_link: string) {
+    return this.newsService.findOne(page_link);
   }
 
   @Patch(':id')

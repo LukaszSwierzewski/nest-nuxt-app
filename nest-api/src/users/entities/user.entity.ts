@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Session } from './session.entity';
+import { Comment } from '../../comments/entities/comment.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -27,4 +28,6 @@ export class User {
     cascade: true
   })
   sessions: Session[];
+  @OneToMany((type) => Comment, (comment) => comment.author)
+  comments: Comment[];
 }

@@ -12,9 +12,7 @@ export class UsersService {
   ) {}
   async create(createUserDto: CreateUserDto): Promise<User> {
     const newUser = await this.usersRepository.create(createUserDto);
-    const randomID = String(Math.random() * 1000)
-    const randomUserID = Math.random() * 1000
-    const afterLoginCookie = await this.sessionRepository.create({'session_cookie': 'secret_random', 'user_id': randomUserID})
+    const afterLoginCookie = await this.sessionRepository.create({'session_cookie': 'secret_random'})
     await this.sessionRepository.save(afterLoginCookie)
     newUser.sessions = [afterLoginCookie]
     return this.usersRepository.save(newUser);
@@ -26,12 +24,24 @@ export class UsersService {
     if (currentSessionExist !== undefined) {
       return
     }
-
-    const afterLoginCookie = await this.sessionRepository.create({'session_cookie': cookie, 'user_id': userUpdated.id})
-    userUpdated.sessions = await this.findAllSession(userUpdated.id)
-    await userUpdated.sessions.push(afterLoginCookie)
-    
-    return this.usersRepository.save(userUpdated)
+    const afterLoginCookie = new Session ();
+    afterLoginCookie.session_cookie = cookie
+    afterLoginCookie.session_user = userUpdated
+    return this.sessionRepository.save(afterLoginCookie)
+  }
+  async findUsername (username: string): Promise<boolean> {
+    const user = await this.usersRepository.findOne({username})
+    if (!user) {
+      return false
+    }
+    return true
+  }
+  async findEmail (email: string): Promise<boolean> {
+    const user = await this.usersRepository.findOne({email})
+    if (user) {
+      return true
+    }
+    return false
   }
   async findAllSession(userId: number): Promise<any> {
     const session = await this.sessionRepository.find({
@@ -67,10 +77,9 @@ export class UsersService {
     const foundSession = this.sessionRepository.findOneOrFail({ session_cookie });
     return foundSession;
   }
-  async updateSessionID(id: number, session_cookie: any, user_id): Promise<any> {
+  async updateSessionID(id: number, session_cookie: any): Promise<any> {
     await this.sessionRepository.update(+id, {
-        session_cookie,
-        user_id
+        session_cookie
       });
   }
 
