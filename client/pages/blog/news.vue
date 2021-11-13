@@ -2,13 +2,16 @@
     <div>
         <h1>Page</h1>
         <ul>
-            <li v-for="(singleNews, index) in news.data" :key="index">{{ singleNews.id }}</li>
+            <li v-for="(singleNews, index) in news.data" :key="index">
+              <NuxtLink 
+                :to="{ name: 'blog-post-page', params: { page: singleNews.page_link }}">
+                {{ singleNews.title }}
+              </NuxtLink></li>
         </ul>
-        {{ news }}
-
         <div class="pagination">
-            <NuxtLink @click="refresh" :to="{ name: 'blog-news', query: { page: routePageQuery }}">Home page</NuxtLink>
+            <NuxtLink @click="refresh" :to="{ name: 'blog-news', query: { page: routePageQuery }}">Next page</NuxtLink>
         </div>
+        {{ news }}
     </div>
 </template>
 
