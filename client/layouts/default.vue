@@ -22,22 +22,6 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
-        <span v-if='user && user.isAdmin'>
-          <v-list-item
-            v-for="(item, i) in adminProtectedRoute"
-            :key="i"
-            :to="item.to"
-            router
-            exact
-          >
-            <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title v-text="item.title" />
-            </v-list-item-content>
-          </v-list-item>
-        </span>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
@@ -69,6 +53,7 @@
     >
       <v-list>
         <v-list-item
+          v-if='user && user.isAuth'
           exact
           @click="logout"
         >
@@ -79,9 +64,38 @@
             <v-list-item-title v-text="'logout'" />
           </v-list-item-content>
         </v-list-item>
+          <v-list-item
+            v-else
+            :to="'/login'"
+            router
+            exact
+          >
+            <v-list-item-action>
+              <v-icon>mdi-account</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title v-text="'Login/Register'" />
+            </v-list-item-content>
+          </v-list-item>
         <span v-if='user && user.isAuth'>
           <v-list-item
             v-for="(item, i) in protectedRoute"
+            :key="i"
+            :to="item.to"
+            router
+            exact
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title" />
+            </v-list-item-content>
+          </v-list-item>
+        </span>
+        <span v-if='user && user.isAdmin'>
+          <v-list-item
+            v-for="(item, i) in adminProtectedRoute"
             :key="i"
             :to="item.to"
             router
@@ -131,9 +145,9 @@ export default {
       fixed: false,
       accountItems: [
         {
-          icon: "mdi-log-out",
-          title: "Welcome",
-          to: "/",
+          icon: "mdi-chart-bubble",
+          title: "Login/register",
+          to: "/login",
         },
       ],
       items: [
@@ -141,11 +155,6 @@ export default {
           icon: "mdi-apps",
           title: "Home",
           to: "/",
-        },
-        {
-          icon: "mdi-chart-bubble",
-          title: "Login/register",
-          to: "/login",
         },
         {
           icon: "mdi-apps",
