@@ -20,14 +20,30 @@ import { sessionTdo } from './dto/session-user.dto';
 import { LocalAuthGuard } from '../auth/local-auth.guard';
 import { AuthenticatedGuard } from '../auth/authenticated.guard';
 import { AdminAuthenticatedGuard } from '../auth/admin.guard';
+import * as bcrypt from 'bcrypt'
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
+    let errors = [];
+    const userExist = await this.usersService.findEmail(createUserDto.email)
+    if (userExist) {
+      errors.push('user already exist')
+    }
+    const usernameExist = await this.usersService.findUsername(createUserDto.username)
+    if (usernameExist) {
+      errors.push('username already exist')
+    }
+    if (errors.length === 0) {
+      const salt = await bcrypt.genSalt();
+      const password = await bcrypt.hash(createUserDto.password, salt)
+      createUserDto.password = password
     const user = await this.usersService.create(createUserDto);
     return this.login(user);
+    } else {
+      return errors
+    }
   }
 
   @Get()
@@ -47,6 +63,7 @@ export class UsersController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req): Promise<any> {
+    console.log(req.user)
     return req.user;
   }
   @Post('/set/session')
@@ -65,8 +82,7 @@ export class UsersController {
     if (session) {
       await this.usersService.updateSessionID(
         session.id,
-        req.cookies['connect.sid'],
-        req.user.id
+        req.cookies['connect.sid']
       )
     } else {
       throw new Error

@@ -1,7 +1,8 @@
 <template>
   <v-row justify="center" align="center">
-    <div v-if='user && user.length === 0'>
-      <form>
+    <div class="user--forms" v-if='user && user.length === 0'>
+      <form id='register' class='register'>
+        <h2>Register</h2>
         <v-text-field
           v-model="username"
           label="Username"
@@ -24,7 +25,8 @@
           submit
         </v-btn>
       </form>
-              <form>
+      <form id='login' class='login'>
+        <h2>Login</h2>
         <v-text-field
           v-model="username"
           label="Username"
@@ -43,10 +45,18 @@
         </v-btn>
       </form>
     </div>
-    <div v-if='user && user.isAuth'>
-      <v-btn @click='logout'>Logout</v-btn>
+    <div class="errors_login" v-if='errors.length > 0'>
+      <v-alert
+        v-for='(error, index) in errors'
+        :key='index'
+        dense
+        outlined
+        type="error"
+      >
+        {{ error }}
+      </v-alert>
     </div>
-    {{ user }}
+    <v-btn @click='logout'>wyloguj</v-btn>
   </v-row>
 </template>
 <script>
@@ -58,6 +68,7 @@ export default {
       username: "",
       password: "",
       email: "",
+      errors: [],
     };
   },
   computed: {
@@ -73,10 +84,15 @@ export default {
           password: this.password,
           email: this.email,
         };
-        await authService.register(user);
-        const userLogin = await authService.login(user);
-        await authService.setupSession(userLogin);
-        this.$store.dispatch("users/me", userLogin.data);
+        this.errors = [];
+        const registerService = await authService.register(user);
+        if (registerService.data.length === 0) {
+          const userLogin = await authService.login(user);
+          await authService.setupSession(userLogin);
+          this.$store.dispatch("users/me", userLogin.data);
+        } else {
+          this.errors = registerService.data;
+        }
       } catch (err) {
         console.log(err);
       }
@@ -87,11 +103,12 @@ export default {
           username: this.username,
           password: this.password,
         };
+        this.errors = [];
         const userLogin = await authService.login(user);
         const userData = await authService.sessionAfterLogin(userLogin);
         this.$store.dispatch("users/me", userLogin.data);
       } catch (err) {
-        console.log(err);
+        this.errors.push("Invalid login or password");
       }
     },
     async logout() {
@@ -101,3 +118,17 @@ export default {
   },
 };
 </script>
+<style lang='scss'>
+.user--forms {
+  display: flex;
+  width: 100%;
+  margin-top: 100px;
+  justify-content: center;
+}
+.register {
+  margin-right: 20px;
+}
+.errors_login {
+  margin-top: 20px;
+}
+</style>
