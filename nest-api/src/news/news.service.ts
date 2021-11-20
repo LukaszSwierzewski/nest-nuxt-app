@@ -14,11 +14,12 @@ export class NewsService extends Validations {
   ) {
     super();
   }
-  create(createNewsDto: CreateNewsDto) {
-    const newPosts = this.newsRepository.create(createNewsDto);
+  async create(createNewsDto: CreateNewsDto) {
+    const newPosts = await this.newsRepository.create(createNewsDto);
     const isValidTitle = this.checkNewsTitle(createNewsDto.title);
     if (isValidTitle) {
-      return this.newsRepository.save(newPosts);
+      const newPostsSaved = this.newsRepository.save(newPosts);
+      return newPostsSaved
     } else {
       return 'Invalid title. Title must have atleast 3 characters';
     }
@@ -29,6 +30,7 @@ export class NewsService extends Validations {
     const limit = 6;
     const skippedItems = (paginationDto.page - 1) * limit;
     const totalCount = await this.newsRepository.count();
+    const maxPages = Math.ceil(totalCount/limit)
     const news = await this.newsRepository
       .createQueryBuilder()
       .orderBy('created_at', 'DESC')
@@ -37,6 +39,7 @@ export class NewsService extends Validations {
       .getMany();
     return {
       totalCount,
+      maxPages,
       page: paginationDto.page,
       limit: limit,
       data: news,
@@ -49,7 +52,7 @@ export class NewsService extends Validations {
 
   findOne(page_link: string) {
     const oneUser = this.newsRepository.findOneOrFail({ page_link }, {
-      relations: ['comments'],
+      relations: ['comments', 'comments.author'],
     });
     return oneUser;
   }

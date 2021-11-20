@@ -127,7 +127,7 @@ export default {
   async created() {
     authService.checkSessionExpire().then((response) => {
       if (response.data.status === 401) {
-        console.log("expired");
+        loggedOut = true
       } else {
         this.$store.dispatch("users/me", response.data);
       }
@@ -142,6 +142,7 @@ export default {
     return {
       clipped: false,
       drawer: false,
+      loggedOut: false,
       fixed: false,
       accountItems: [
         {
@@ -172,8 +173,8 @@ export default {
       adminProtectedRoute: [
         {
           icon: "mdi-apps",
-          title: "admin guard route",
-          to: "/account/admin",
+          title: "Add news",
+          to: "/account/add_news",
         },
       ],
       miniVariant: false,

@@ -14,7 +14,7 @@ export class CommentsController {
 
   @Get()
   findAll() {
-    return this.commentsService.create({comment_content: 'blabla'});
+    // return this.commentsService.create({comment_content: 'blabla'});
   }
 
   @Get(':id')

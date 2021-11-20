@@ -15,7 +15,6 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { sessionTdo } from './dto/session-user.dto';
 import { LocalAuthGuard } from '../auth/local-auth.guard';
 import { AuthenticatedGuard } from '../auth/authenticated.guard';
@@ -63,7 +62,6 @@ export class UsersController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req): Promise<any> {
-    console.log(req.user)
     return req.user;
   }
   @Post('/set/session')

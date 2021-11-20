@@ -6,5 +6,11 @@ export default {
   },
   getSingleBlog(routeName) {
     return API().get("/blog/" + routeName);
+  },
+  postsSingleBlog (params) {
+    return API().post('/blog', params)
+  },
+  postsAddComment (params) {
+    return API().post('/comments', params)
   }
 };

@@ -15,13 +15,16 @@ export class CommentsService {
     @InjectRepository(News) private newsRepository: Repository<News>,
   ) {}
   async create(createCommentDto: CreateCommentDto) {
+    console.log(createCommentDto)
     const newComment = new Comment()
-    const userID = await this.usersRepository.findOneOrFail({id: 38})
-    const newsID = await this.newsRepository.findOneOrFail({id: 4})
-    newComment.comment_content = 'test'
+    const userID = await this.usersRepository.findOneOrFail({id: createCommentDto.user_id})
+    const newsID = await this.newsRepository.findOneOrFail({id: createCommentDto.news_id})
+    newComment.comment_content = createCommentDto.comment_content
     newComment.author = userID
     newComment.post = newsID
-    return this.commentRepository.save(newComment);
+    if (createCommentDto.comment_content) {
+      return this.commentRepository.save(newComment);
+    }
   }
 
   findAll() {
