@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateNewsDto } from './dto/create-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { getSqljsManager, Repository } from 'typeorm';
 import { News } from './entities/news.entity';
 import { Validations } from './validation/news.validations';
 import { PaginationDto } from './dto/Pagination.dto';
@@ -50,8 +50,8 @@ export class NewsService extends Validations {
     return allNews;
   }
 
-  findOne(page_link: string) {
-    const oneUser = this.newsRepository.findOneOrFail({ page_link }, {
+  async findOne(page_link: string) {
+    const oneUser = await this.newsRepository.findOne({ page_link }, {
       relations: ['comments', 'comments.author'],
     });
     return oneUser;

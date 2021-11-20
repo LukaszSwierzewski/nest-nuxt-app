@@ -4,7 +4,9 @@ import { News } from '../../news/entities/news.entity'
 @Entity()
 export class Comment {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number;  
+  @Column()
+  is_accepted: boolean;
   @Column()
   comment_content: string;
   @CreateDateColumn()

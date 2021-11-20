@@ -1,14 +1,17 @@
 <template>
     <div class="mt-5">
-      <v-row class="flex flex-column">
-        {{ blogData }}
-        {{ user }}
-        <h1> {{ blogData.title }} </h1>
-        <p>{{ blogData.description }}</p>
-        <p>{{ blogData.post_content }}</p>
+      <v-row class="flex flex-column" justify="center" align="center">
+        <v-col class="col-12 col-md-8">
+          <h1> {{ blogData.title }} </h1>
+          <p>{{ blogData.description }}</p>
+          <p>{{ blogData.post_content }}</p>
+        </v-col>
       </v-row>
-      <v-row justify="center">
-        <v-col cols="8">
+      <v-row class="flex-column" justify="center" align="center" >
+        <v-col class="col-md-8 col-12">
+        <Comment v-for="(comment, index) in blogData.comments" :key='index' :comment="comment" />
+        </v-col>
+        <v-col class="col-md-8 col-12">
           <v-form v-if="user && user.id">
             <v-textarea
               filled
@@ -20,7 +23,7 @@
               depressed
               @click="addComment"
               color="primary"
-              >Add new Posts
+              >Add new Comment
             </v-btn>
           </v-form>
             <v-alert
@@ -28,20 +31,21 @@
               dense
               outlined
               type="info"
-            >Only logged user can add comments</v-alert>
+            >Only logged user can add comments. Login to add</v-alert>
         </v-col>
       </v-row>
-        <div>
-          <p v-for='comment in blogData.comments' :key='comment.id'>{{ comment }}</p>
-        </div>
     </div>
 </template>
 
 <script>
 import blogService from "../../../api/blog/blog";
+import Comment from '../../../components/blog/Comment'
 import { mapState } from "vuex";
 export default {
   name: "single-blog-news",
+  components: {
+    Comment
+  },
   data() {
     return {
       addCommentData: {
