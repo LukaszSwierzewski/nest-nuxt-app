@@ -176,11 +176,16 @@ export default {
           title: "Add news",
           to: "/account/add_news",
         },
+        {
+          icon: "mdi-apps",
+          title: "manage news",
+          to: '/account/manage_news?page=1&perPage=3'
+        }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: "My app",
+      title: "My app"
     };
   },
   methods: {

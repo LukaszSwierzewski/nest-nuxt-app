@@ -22,7 +22,6 @@ export class NewsController {
 
   @Post()
   async create(@Body() createNewsDto: CreateNewsDto, @Request() req) {
-    console.log(createNewsDto)
     if (req.user && req.user.isAdmin) {
       const data = await this.newsService.create(createNewsDto);
       return { data, status: 'Post has been added' }

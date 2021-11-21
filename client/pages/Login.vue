@@ -1,7 +1,7 @@
 <template>
-  <v-row justify="center" align="center">
+  <v-row justify="center" align="center" class="flex-column">
     <div class="user--forms" v-if='user && user.length === 0'>
-      <form id='register' class='register'>
+      <form v-if="currentFormRegister" id='register' class='register'>
         <h2>Register</h2>
         <v-text-field
           v-model="username"
@@ -15,6 +15,7 @@
         ></v-text-field>
         <v-text-field
           v-model="password"
+          type="password"
           label="Password"
           required
         ></v-text-field>
@@ -25,7 +26,7 @@
           submit
         </v-btn>
       </form>
-      <form id='login' class='login'>
+      <form v-else id='login' class='login'>
         <h2>Login</h2>
         <v-text-field
           v-model="username"
@@ -34,6 +35,7 @@
         ></v-text-field>
         <v-text-field
           v-model="password"
+          type="password"
           label="Password"
           required
         ></v-text-field>
@@ -44,6 +46,10 @@
           submit
         </v-btn>
       </form>
+    </div>
+    <div class="login_form--select">
+      <p v-if="currentFormRegister">I already have an account. <strong class="change--form" @click='changeToLogin'>Login form.</strong></p>
+      <p v-else>I want to create new account. <strong class="change--form" @click="changeToRegister"> Register form.</strong></p>
     </div>
     <div class="errors_login" v-if='errors.length > 0'>
       <v-alert
@@ -68,6 +74,7 @@ export default {
       password: "",
       email: "",
       errors: [],
+      currentFormRegister: false
     };
   },
   computed: {
@@ -76,7 +83,13 @@ export default {
     }),
   },
   methods: {
-    async register() {
+    changeToLogin () {
+      this.currentFormRegister = false
+    },
+    changeToRegister () {
+      this.currentFormRegister = true
+    },
+    async register () {
       try {
         const user = {
           username: this.username,
@@ -121,10 +134,25 @@ export default {
   margin-top: 100px;
   justify-content: center;
 }
-.register {
-  margin-right: 20px;
-}
 .errors_login {
   margin-top: 20px;
+}
+.register, .login {
+  max-width: 550px;
+  padding: 1rem;
+  width: 100%;
+}
+.change--form {
+  cursor: pointer;
+  transition: border-color 0.2s linear;
+  border: 1px solid transparent;
+  &:hover {
+    border-bottom-color: #000;
+  }
+}
+.login_form--select {
+  padding: 1rem;
+  max-width: 550px;
+  width: 100%;
 }
 </style>

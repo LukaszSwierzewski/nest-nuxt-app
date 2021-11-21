@@ -27,7 +27,7 @@ export class NewsService extends Validations {
   async findAllAndPaginate(
     paginationDto: PaginationDto,
   ): Promise<PaginatedNewsDto> {
-    const limit = 6;
+    const limit = paginationDto.perPage ? paginationDto.perPage : 6;
     const skippedItems = (paginationDto.page - 1) * limit;
     const totalCount = await this.newsRepository.count();
     const maxPages = Math.ceil(totalCount/limit)
