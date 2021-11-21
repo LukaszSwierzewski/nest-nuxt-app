@@ -8,7 +8,7 @@
         </v-col>
       </v-row>
       <v-row class="flex-column" justify="center" align="center" >
-        <v-col class="col-md-8 col-12">
+        <v-col v-if="blogData.comments && blogData.comments.length > 0" class="col-md-8 col-12">
         <Comment v-for="(comment, index) in blogData.comments" :key='index' :comment="comment" />
         </v-col>
         <v-col class="col-md-8 col-12">

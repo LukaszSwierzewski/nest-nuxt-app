@@ -1,5 +1,5 @@
 <template>
-       <v-card
+       <v-card v-if='comment && comment.author'
           class="mx-auto mb-5 pa-1"
           color=""
           dark

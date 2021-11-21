@@ -25,11 +25,7 @@ export class News {
   created_at: Date;
   @UpdateDateColumn()
   updated_at: Date;
-  @OneToMany((type) => Comment, (comment) => comment.post, {
-    cascade: true,
-    onDelete: 'CASCADE',
-    onUpdate:'CASCADE'
-  })
+  @OneToMany((type) => Comment, (comment) => comment.post)
   comments: Comment[];
   
 }

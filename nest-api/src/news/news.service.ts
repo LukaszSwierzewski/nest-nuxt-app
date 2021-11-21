@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateNewsDto } from './dto/create-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getSqljsManager, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { News } from './entities/news.entity';
 import { Validations } from './validation/news.validations';
 import { PaginationDto } from './dto/Pagination.dto';
@@ -51,10 +51,21 @@ export class NewsService extends Validations {
   }
 
   async findOne(page_link: string) {
-    const oneUser = await this.newsRepository.findOne({ page_link }, {
-      relations: ['comments', 'comments.author'],
-    });
-    return oneUser;
+    // const oneUser = await this.newsRepository.findOne({
+    //   where: { 
+    //     page_link, 
+    //     comments: {
+    //       'is_accepted': 1
+    //     }
+    //   },
+    //   relations: ['comments', 'comments.author'],
+    // });
+    const user = await this.newsRepository.createQueryBuilder('news')
+    .leftJoinAndSelect('news.comments', 'comments', 'comments.is_accepted = true')
+    .leftJoinAndSelect('comments.author', 'author')
+    .where('news.page_link = :page_link', {page_link})
+    .getMany();
+    return user[0];
   }
 
   update(id: number, updateNewsDto: UpdateNewsDto) {
