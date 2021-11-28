@@ -12,14 +12,14 @@ export class NewsService extends Validations {
   constructor(
     @InjectRepository(News) private newsRepository: Repository<News>,
   ) {
-    super();
+    super(10);
   }
   async create(createNewsDto: CreateNewsDto) {
     const newPosts = await this.newsRepository.create(createNewsDto);
     const isValidTitle = this.checkNewsTitle(createNewsDto.title);
     if (isValidTitle) {
       const newPostsSaved = this.newsRepository.save(newPosts);
-      return newPostsSaved
+      return newPostsSaved;
     } else {
       return 'Invalid title. Title must have atleast 3 characters';
     }
@@ -27,10 +27,11 @@ export class NewsService extends Validations {
   async findAllAndPaginate(
     paginationDto: PaginationDto,
   ): Promise<PaginatedNewsDto> {
+    console.log(this.someNumber);
     const limit = paginationDto.perPage ? paginationDto.perPage : 6;
     const skippedItems = (paginationDto.page - 1) * limit;
     const totalCount = await this.newsRepository.count();
-    const maxPages = Math.ceil(totalCount/limit)
+    const maxPages = Math.ceil(totalCount / limit);
     const news = await this.newsRepository
       .createQueryBuilder()
       .orderBy('created_at', 'DESC')
