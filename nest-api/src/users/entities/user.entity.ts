@@ -24,10 +24,10 @@ export class User {
   created_at: Date;
   @UpdateDateColumn()
   updated_at: Date;
-  @OneToMany((type) => Session, (session) => session.session_user, {
-    cascade: true
+  @OneToMany(() => Session, (session) => session.session_user, {
+    cascade: true,
   })
   sessions: Session[];
-  @OneToMany((type) => Comment, (comment) => comment.author)
+  @OneToMany(() => Comment, (comment) => comment.author)
   comments: Comment[];
 }

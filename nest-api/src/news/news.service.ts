@@ -14,7 +14,7 @@ export class NewsService extends Validations {
   ) {
     super(10);
   }
-  async create(createNewsDto: CreateNewsDto) {
+  async create(createNewsDto: CreateNewsDto): Promise<News | string> {
     const newPosts = await this.newsRepository.create(createNewsDto);
     const isValidTitle = this.checkNewsTitle(createNewsDto.title);
     if (isValidTitle) {
@@ -51,22 +51,27 @@ export class NewsService extends Validations {
     return allNews;
   }
 
-  async findOne(page_link: string) {
+  async findOne(page_link: string): Promise<News> {
     // const oneUser = await this.newsRepository.findOne({
-    //   where: { 
-    //     page_link, 
+    //   where: {
+    //     page_link,
     //     comments: {
     //       'is_accepted': 1
     //     }
     //   },
     //   relations: ['comments', 'comments.author'],
     // });
-    const user = await this.newsRepository.createQueryBuilder('news')
-    .leftJoinAndSelect('news.comments', 'comments', 'comments.is_accepted = true')
-    .leftJoinAndSelect('comments.author', 'author')
-    .where('news.page_link = :page_link', {page_link})
-    .getMany();
-    return user[0];
+    const news = await this.newsRepository
+      .createQueryBuilder('news')
+      .leftJoinAndSelect(
+        'news.comments',
+        'comments',
+        'comments.is_accepted = true',
+      )
+      .leftJoinAndSelect('comments.author', 'author')
+      .where('news.page_link = :page_link', { page_link })
+      .getMany();
+    return news[0];
   }
 
   update(id: number, updateNewsDto: UpdateNewsDto) {

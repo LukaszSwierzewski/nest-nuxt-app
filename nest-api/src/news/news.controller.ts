@@ -9,7 +9,7 @@ import {
   Delete,
   Query,
   HttpException,
-  HttpStatus
+  HttpStatus,
 } from '@nestjs/common';
 import { NewsService } from './news.service';
 import { CreateNewsDto } from './dto/create-news.dto';
@@ -24,12 +24,15 @@ export class NewsController {
   async create(@Body() createNewsDto: CreateNewsDto, @Request() req) {
     if (req.user && req.user.isAdmin) {
       const data = await this.newsService.create(createNewsDto);
-      return { data, status: 'Post has been added' }
+      return { data, status: 'Post has been added' };
     } else {
-      throw new HttpException({
-        status: HttpStatus.FORBIDDEN,
-        error: 'Only admin can add new posts',
-      }, HttpStatus.FORBIDDEN);
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error: 'Only admin can add new posts',
+        },
+        HttpStatus.FORBIDDEN,
+      );
     }
   }
 

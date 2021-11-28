@@ -26,13 +26,18 @@ export class CommentsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.commentsService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<any> {
+    const comment = this.commentsService.findOne(+id);
+    return comment;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentsService.update(+id, updateCommentDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateCommentDto: UpdateCommentDto,
+  ): Promise<any> {
+    const comment = this.commentsService.update(+id, updateCommentDto);
+    return comment;
   }
 
   @Delete(':id')
