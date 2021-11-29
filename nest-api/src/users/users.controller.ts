@@ -74,7 +74,6 @@ export class UsersController {
       req.user.id,
       req.cookies['connect.sid'],
     );
-    console.log(user);
     return user;
   }
   @Post('/check/session')
