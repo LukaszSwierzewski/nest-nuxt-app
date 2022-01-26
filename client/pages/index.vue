@@ -3,20 +3,32 @@
     <h2>Strona głównaaaaa</h2>
     <h1>test</h1>
     {{ user }}
+    {{ capacity }}
+    ___________
+    {{ counter }}
+    _____________
+    {{ users }}
     <br>
-    {{ person }}
-    <v-btn @click="isReferenceOrCopy">Click</v-btn>
+    <v-btn @click='counterInc'>composition test</v-btn>
   </v-row>
 </template>
 <script>
-import { deepClone } from 'lodash'
+import useEvent from "@/use/events.js";
+import useRequest from '@/use/request.js';
 import { mapGetters } from 'vuex'
 export default {
+  setup() {
+    const { capacity, attending, counter, spacesLeft, increaceCapacity, counterInc } = useEvent();
+    const { users, fetchUsers } = useRequest()
+    const getUsers = async () => {
+      users.value = await fetchUsers()
+    }
+    getUsers()
+    
+    return { capacity, attending, spacesLeft, increaceCapacity, counter, counterInc, users };
+  },
   data () {
     return {
-      person: {
-        name: "lukasz",
-      }
     }
   },
   computed: {
@@ -25,16 +37,6 @@ export default {
     }),
   },
   methods: {
-    makeReferer () {
-      this.person = this.user
-    },
-    isReferenceOrCopy() {
-      this.$store.dispatch('users/me', {
-        name: 'lukasz',
-        isAuth: false,
-        isAdmin: true
-      })
-    }
   }
 };
 </script>

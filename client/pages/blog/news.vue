@@ -34,6 +34,7 @@
               </v-btn>
             </v-card-actions>
           </v-card>
+          {{ capacity }}
           <v-col class="col-md-8 col-12 pa-0 mt-4 mb-4">
             <div class="pagination">
               <NuxtLink :class="{visibility: currentPage === 1 && news.totalCount > news.limit}" @click="refresh" :to="{ name: 'blog-news', query: { page: routePrevPageQuery }}">Previous page</NuxtLink>
@@ -47,8 +48,13 @@
 <script>
 import blogService from "../../api/blog/blog";
 import { mapState } from "vuex";
+import useEvent from "@/use/events.js";
 export default {
   name: "blog-news",
+  setup() {
+    const { capacity, attending, spacesLeft, increaceCapacity } = useEvent();
+    return { capacity, attending, spacesLeft, increaceCapacity };
+  },
   computed: {
     ...mapState({
       news: (state) => state.news.currentBlog,

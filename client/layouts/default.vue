@@ -169,6 +169,11 @@ export default {
           title: "guard route",
           to: "/account",
         },
+        {
+          icon: "mdi-apps",
+          title: "my goals",
+          to: "/account/my_projects"
+        }
       ],
       adminProtectedRoute: [
         {
