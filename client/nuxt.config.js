@@ -34,9 +34,18 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ["@nuxtjs/axios"],
+  modules: ["@nuxtjs/axios", "nuxt-socket-io"],
   axios: {
     baseURL: "http://localhost:3000"
+  },
+  io: {
+    // module options
+    sockets: [{
+      default: true,
+      name: 'ComplainsGateway',
+      channel: "/ComplainsGateway",
+      url: "http://localhost:3000"
+    }]
   },
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

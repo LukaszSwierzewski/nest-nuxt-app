@@ -162,6 +162,11 @@ export default {
           title: "blog",
           to: "/blog/news?page=1",
         },
+              {
+          icon: "mdi-apps",
+          title: "socket-io",
+          to: "/socket",
+        },
       ],
       protectedRoute: [
         {

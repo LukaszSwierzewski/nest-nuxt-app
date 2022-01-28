@@ -27,5 +27,4 @@ export class News {
   updated_at: Date;
   @OneToMany((type) => Comment, (comment) => comment.post)
   comments: Comment[];
-  
 }

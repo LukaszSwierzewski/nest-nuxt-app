@@ -7,9 +7,16 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { NewsModule } from './news/news.module';
 import { CommentsModule } from './comments/comments.module';
+import { ComplainsGateway } from './complains/complains.gateway';
 @Module({
-  imports: [TypeOrmModule.forRoot(config), UsersModule, AuthModule, NewsModule, CommentsModule],
+  imports: [
+    TypeOrmModule.forRoot(config),
+    UsersModule,
+    AuthModule,
+    NewsModule,
+    CommentsModule,
+  ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ComplainsGateway],
 })
 export class AppModule {}

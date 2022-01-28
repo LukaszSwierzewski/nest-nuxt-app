@@ -1,10 +1,16 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  ManyToOne,
+} from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { News } from '../../news/entities/news.entity'
+import { News } from '../../news/entities/news.entity';
 @Entity()
 export class Comment {
   @PrimaryGeneratedColumn()
-  id: number;  
+  id: number;
   @Column()
   is_accepted: boolean;
   @Column()
