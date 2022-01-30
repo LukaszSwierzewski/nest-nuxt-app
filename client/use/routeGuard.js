@@ -1,10 +1,11 @@
-import { useRouter } from "@nuxtjs/composition-api";
-import UsersService from '@/api/users.js'
+import { useRouter, ref } from "@nuxtjs/composition-api";
 export default function routeGuard() {
-    const routeCheck = async() => {
+    let isLoggedIn = ref(false)
+    const routeCheck = async(routeType) => {
         const router = useRouter()
         try {
-            const routeGuard = await UsersService.userInfoRoute();
+            const routeGuard = await routeType
+            isLoggedIn.value = true
             return routeGuard;
         } catch (e) {
             router.push({
@@ -12,5 +13,5 @@ export default function routeGuard() {
             })
         }
     }
-    return { routeCheck }
+    return { routeCheck, isLoggedIn }
 }

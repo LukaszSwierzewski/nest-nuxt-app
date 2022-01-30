@@ -41,11 +41,16 @@ export default {
   io: {
     // module options
     sockets: [{
-      default: true,
       name: 'ComplainsGateway',
-      channel: "/ComplainsGateway",
+      channel: "/complain-namespace",
       url: "http://localhost:3000"
-    }]
+    },
+    {
+      name: 'blog-gateway',
+      channel: '/blog-gateway',
+      url: "http://localhost:3000"
+    }  
+  ]
   },
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

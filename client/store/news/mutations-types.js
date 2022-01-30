@@ -1,4 +1,5 @@
 const types = {
-  GET_PAGE_BLOG: "/GET_CURENT_PAGE"
+  GET_PAGE_BLOG: "/GET_CURENT_PAGE",
+  ADD_SINGLE_BLOG_FROM_SOCKET: "/GET_SINGLE_BLOG_FROM_SOCKET_IO"
 };
 export default types;

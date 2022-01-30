@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="isLoggedIn">
         <v-row class="mt-5" justify="center" align="center">
           <h2>Add new posts</h2>
         </v-row>
@@ -53,11 +53,17 @@
 </template>
 
 <script>
-import userService from "../../api/users";
-import blogService from '../../api/blog/blog';
+import UsersService from "@/api/users";
+import blogService from '@/api/blog/blog';
+import routeGuard from '@/use/routeGuard.js';
 export default {
-  async created() {
-    const routeGuard = await userService.adminInfoRoute();
+  setup() {
+    const { routeCheck, isLoggedIn } = routeGuard();
+    const routeGuardFetch = async() => {
+        await routeCheck(UsersService.adminInfoRoute())
+    }
+    routeGuardFetch()
+    return { isLoggedIn }
   },
   data () {
     return {

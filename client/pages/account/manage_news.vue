@@ -1,5 +1,5 @@
 <template>
-    <v-row justify="center" align="center" class="flex-column">
+    <v-row v-if="isLoggedIn" justify="center" align="center" class="flex-column">
         <h1 class="pa-5">News manager</h1>
         <v-data-table
         :items="news.data"
@@ -29,9 +29,9 @@
         <div class="text-center">
         <v-pagination
             v-model="news.page"
-            @input="paginationChange"
-            @next="nextPage"
-            @prev="prevPage"
+            @input="changePage(news.page, perPage)"
+            @next="changePage(news.page++, perPage)"
+            @prev="changePage(news.page--, perPage)"
             :length="news.maxPages"
         ></v-pagination>
         </div>
@@ -39,8 +39,9 @@
 </template>
 <script>
 
-import userService from "../../api/users";
+import UsersService from "../../api/users";
 import blogService from '../../api/blog/blog';
+import routeGuard from '@/use/routeGuard.js';
 export default {
     data () {
         return {
@@ -67,8 +68,13 @@ export default {
             deep: true
         }
     },
-    async created() {
-        const routeGuard = await userService.adminInfoRoute();
+    setup() {
+        const { routeCheck, isLoggedIn } = routeGuard();
+        const routeGuardFetch = async() => {
+            await routeCheck(UsersService.adminInfoRoute())
+        }
+        routeGuardFetch()
+        return { isLoggedIn }
     },
     async asyncData({route}) {
         const newsRequest = await blogService.getPage(route.query);
@@ -76,34 +82,13 @@ export default {
         return { news }
     },
     methods: {
-        test (e) {
-            console.log(e)
-        },
-        async nextPage () {
+        async changePage (page, perPage) {
             const params = {
-                page: this.news.page++,
-                perPage: this.perPage
+                page,
+                perPage
             }
             const newsRequest = await blogService.getPageSync(params)
-            const news = await newsRequest.data
-            this.news = news
-        },
-        async prevPage () {
-            const params = {
-                page: this.news.page--,
-                perPage: this.perPage
-            }
-            const newsRequest = await blogService.getPageSync(params)
-            const news = await newsRequest.data
-            this.news = news
-        },
-        async paginationChange () {
-            const params = {
-                page: this.news.page,
-                perPage: this.perPage
-            }
-            const newsRequest = await blogService.getPageSync(params)
-            const news = await newsRequest.data
+            const news = newsRequest.data
             this.news = news
         },
         editItem (item) {

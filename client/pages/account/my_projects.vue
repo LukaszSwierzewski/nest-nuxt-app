@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="isLoggedIn">
         <v-row v justify="center" align="center">
             <h2>From protected routeeeeee</h2>
         </v-row>
@@ -8,14 +8,16 @@
 
 <script>
 import routeGuard from '@/use/routeGuard.js';
+import UsersService from '@/api/users.js'
 export default {
 
   setup() {
-    const { routeCheck } = routeGuard();
+    const { routeCheck, isLoggedIn } = routeGuard();
     const routeGuardFetch = async() => {
-        await routeCheck()
+        await routeCheck(UsersService.userInfoRoute())
     }
     routeGuardFetch()
+    return { isLoggedIn }
   }
 };
 </script>

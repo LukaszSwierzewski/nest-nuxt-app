@@ -1,24 +1,23 @@
 <template>
     <div>
-        <v-row v-if='user && user.isAuth' v justify="center" align="center">
+        <v-row v-if='isLoggedIn' v justify="center" align="center">
             <h2>From protected route</h2>
         </v-row>
     </div>
 </template>
 
 <script>
-import userService from "../../api/users";
-import { mapGetters } from "vuex";
+import routeGuard from '@/use/routeGuard.js';
+import UsersService from '@/api/users.js'
 export default {
-  computed: {
-    ...mapGetters({
-      user: "users/user",
-    }),
-  },
-  async created() {
-    const routeGuard = await userService.userInfoRoute();
-    return routeGuard;
-  },
+  setup() {
+    const { routeCheck, isLoggedIn } = routeGuard();
+    const routeGuardFetch = async() => {
+        await routeCheck(UsersService.userInfoRoute())
+    }
+    routeGuardFetch()
+    return { isLoggedIn }
+  }
 };
 </script>
 

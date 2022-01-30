@@ -34,11 +34,10 @@
               </v-btn>
             </v-card-actions>
           </v-card>
-          {{ capacity }}
           <v-col class="col-md-8 col-12 pa-0 mt-4 mb-4">
             <div class="pagination">
-              <NuxtLink :class="{visibility: currentPage === 1 && news.totalCount > news.limit}" @click="refresh" :to="{ name: 'blog-news', query: { page: routePrevPageQuery }}">Previous page</NuxtLink>
-              <NuxtLink :class="{visibility: currentPage === news.maxPages}" @click="refresh" :to="{ name: 'blog-news', query: { page: routeNextPageQuery }}">Next page</NuxtLink>
+              <NuxtLink :class="{visibility: currentPage === 1 && news.totalCount > news.limit || news.maxPages === 1}" @click="refresh" :to="{ name: 'blog-news', query: { page: routeChangeQuery(-1) }}">Previous page</NuxtLink>
+              <NuxtLink :class="{visibility: currentPage === news.maxPages}" @click="refresh" :to="{ name: 'blog-news', query: { page: routeChangeQuery(1) }}">Next page</NuxtLink>
             </div>
           </v-col>
         </v-row>
@@ -59,14 +58,6 @@ export default {
     ...mapState({
       news: (state) => state.news.currentBlog,
     }),
-    routeNextPageQuery() {
-      const nextRoute = Number(this.$route.query.page) + 1;
-      return nextRoute;
-    },
-    routePrevPageQuery() {
-      const nextRoute = Number(this.$route.query.page) - 1;
-      return nextRoute;
-    },
     currentPage() {
       return Number(this.$route.query.page)
     }
@@ -77,7 +68,18 @@ export default {
       return dateString.toLocaleDateString('pl-PL')
     }
   },
+  created() {
+    this.socket = this.$nuxtSocket({
+        channel: "/complain-namespace"
+    })
+    this.socket.on('msgToClient', (resp) => {
+        this.$store.dispatch('news/getBlogFromSocket', resp)
+    })
+},
   methods: {
+    routeChangeQuery(queryChange) {
+      return Number(this.$route.query.page) + queryChange
+    },
     refresh() {
       this.$nuxt.refresh();
     },

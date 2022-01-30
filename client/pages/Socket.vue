@@ -16,7 +16,7 @@ data () {
 },
 created() {
     this.socket = this.$nuxtSocket({
-        name: 'ComplainsGateway'
+        channel: '/complain-namespace'
     })
     this.socket.on('msgToClient', (resp) => {
         this.socketData.push(resp)
