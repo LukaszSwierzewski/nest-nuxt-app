@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import routeGuard from '@/use/routeGuard.js';
+import routeGuard from '@/composable/routeGuard.js';
 import UsersService from '@/api/users.js'
 export default {
   setup() {

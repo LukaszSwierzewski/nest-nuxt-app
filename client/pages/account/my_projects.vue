@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import routeGuard from '@/use/routeGuard.js';
-import localStorageSaving from '@/use/localStorage.js';
+import routeGuard from '@/composable/routeGuard.js';
+import localStorageSaving from '@/composable/localStorage.js';
 import UsersService from '@/api/users.js'
 export default {
   setup() {

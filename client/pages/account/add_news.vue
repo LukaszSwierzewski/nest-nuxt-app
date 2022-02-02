@@ -55,7 +55,7 @@
 <script>
 import UsersService from "@/api/users";
 import blogService from '@/api/blog/blog';
-import routeGuard from '@/use/routeGuard.js';
+import routeGuard from '@/composable/routeGuard.js';
 export default {
   setup() {
     const { routeCheck, isLoggedIn } = routeGuard();

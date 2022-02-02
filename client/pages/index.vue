@@ -7,8 +7,8 @@
   </v-row>
 </template>
 <script>
-import useEvent from "@/use/events.js";
-import useRequest from '@/use/request.js';
+import useEvent from "@/composable/events.js";
+import useRequest from '@/composable/request.js';
 import { mapGetters } from 'vuex'
 export default {
   setup() {

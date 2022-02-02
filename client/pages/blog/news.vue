@@ -47,7 +47,7 @@
 <script>
 import blogService from "../../api/blog/blog";
 import { mapState } from "vuex";
-import useEvent from "@/use/events.js";
+import useEvent from "@/composable/events.js";
 export default {
   name: "blog-news",
   setup() {

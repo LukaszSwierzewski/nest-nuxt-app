@@ -39,9 +39,9 @@
 </template>
 <script>
 
-import UsersService from "../../api/users";
-import blogService from '../../api/blog/blog';
-import routeGuard from '@/use/routeGuard.js';
+import UsersService from "@/api/users";
+import blogService from '@/api/blog/blog';
+import routeGuard from '@/composable/routeGuard.js';
 export default {
     data () {
         return {
