@@ -16,17 +16,17 @@ import { CreateNewsDto } from './dto/create-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
 import { PaginationDto } from './dto/Pagination.dto';
 import { PaginatedNewsDto } from './dto/PaginatedNews.dto';
-import { ComplainService } from '../complains/complains.service';
+import { NewsGateway } from './news.gateway';
 @Controller('blog')
 export class NewsController {
-  constructor(private readonly newsService: NewsService, private readonly complainsGateway: ComplainService) {
+  constructor(private readonly newsService: NewsService, private readonly newsGateway: NewsGateway) {
   }
 
   @Post()
   async create(@Body() createNewsDto: CreateNewsDto, @Request() req) {
     if (req.user && req.user.isAdmin) {
       const data = await this.newsService.create(createNewsDto);
-      this.complainsGateway.server.emit('msgToClient', data)
+      this.newsGateway.server.emit('msgToClient', data)
       return { data, status: 'Post has been added' };
     } else {
       throw new HttpException(
