@@ -4,6 +4,7 @@
     <h1>test</h1>
     <v-btn @click='counterInc'>composition test
     </v-btn>
+    {{ counter }}
   </v-row>
 </template>
 <script>

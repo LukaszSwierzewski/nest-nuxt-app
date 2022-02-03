@@ -4,15 +4,21 @@
         <ul>
             <li v-for='(person, i) in socketData' :key='i'>{{ person.name }}</li>
         </ul>
+        {{ counter }}
     </div>
 </template>
 
 <script>
+import useEvent from "@/composable/events.js";
 export default {
 data () {
     return {
         socketData: []
     }
+},
+setup () {
+    const { counter } = useEvent()
+    return { counter }
 },
 created() {
     this.socket = this.$nuxtSocket({

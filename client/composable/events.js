@@ -1,6 +1,7 @@
 import { reactive, computed, toRefs, onMounted, ref } from "@nuxtjs/composition-api";
+
+const counter = ref(0)
 export default function useEventSpace() {
-  let counter = ref(0)
   const counterInc = () => {
     counter.value++
   }
