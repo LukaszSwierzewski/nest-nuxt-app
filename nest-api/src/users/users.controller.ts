@@ -92,9 +92,9 @@ export class UsersController {
     }
   }
   @Get('/check/me')
-  async checkUser(@Request() req): Promise<User | GoneException> {
+  async checkUser(@Request() req): Promise<any> {
     if (req.user) {
-      return req.user;
+      return {user: req.user};
     } else {
       return new GoneException();
     }
