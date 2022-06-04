@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center" align="center" class="flex-column">
-    <div class="user--forms" v-if='user && user.length === 0'>
+    <div class="user--forms" v-if='!user'>
       <form v-if="currentFormRegister" id='register' class='register'>
         <h2>Register</h2>
         <v-text-field
@@ -66,7 +66,7 @@
 </template>
 <script>
 import authService from "../api/auth";
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -78,8 +78,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      user: "users/user",
+    ...mapState({
+      user: (state) => state.auth.loggedIn
     }),
   },
   methods: {
@@ -116,10 +116,11 @@ export default {
           password: this.password,
         };
         this.errors = [];
-        const userLogin = await authService.login(user);
-        await authService.sessionAfterLogin(userLogin);
-        this.$store.dispatch("users/me", userLogin.data);
-        this.$router.push({ path: "/" });
+        await this.$auth.loginWith('cookie', { data: user }).then(async () => {
+          console.log(this.$auth.fetchUser())
+          const data = await this.$auth.fetchUser()
+          console.log(data)
+        })
       } catch (err) {
         this.errors.push("Invalid login or password");
       }

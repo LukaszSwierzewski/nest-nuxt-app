@@ -35,9 +35,29 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ["@nuxtjs/axios", "nuxt-socket-io"],
+  modules: ["@nuxtjs/axios", '@nuxtjs/auth-next', "nuxt-socket-io"],
+  auth: {
+    strategies: {
+      cookie: {
+        // cookie: {
+        //   // (optional) If set, we check this cookie existence for loggedIn check
+        //   name: 'connect.sid',
+        // },
+        user: {
+          autoFetch: true,
+          property: false
+        },
+        endpoints: {
+            login: { url: '/users/login', method: 'post' },
+            logout: { url: '/users/logout', method: 'post' },
+            user: { url: '/users/check/me', method: 'get' }
+        }
+      },
+    }
+  },  
   axios: {
-    baseURL: "http://localhost:3000"
+    baseURL: "http://localhost:3000",
+    credentials: true
   },
   io: {
     // module options

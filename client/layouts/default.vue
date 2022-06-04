@@ -36,7 +36,7 @@
         class="acount__btn"
         @click.stop="rightDrawer = !rightDrawer"
       > 
-        <p v-if='user && user.username'>Hi, {{ user.username }}</p>
+        <p v-if='user.user.username'>Hi, {{ user.user.username }}</p>
         <v-icon>mdi-account</v-icon>
       </v-btn>
     </v-app-bar>
@@ -53,7 +53,7 @@
     >
       <v-list>
         <v-list-item
-          v-if='user && user.isAuth'
+          v-if='user.loggedIn'
           exact
           @click="logout"
         >
@@ -77,7 +77,7 @@
               <v-list-item-title v-text="'Login/Register'" />
             </v-list-item-content>
           </v-list-item>
-        <span v-if='user && user.isAuth'>
+        <span v-if='user.loggedIn'>
           <v-list-item
             v-for="(item, i) in protectedRoute"
             :key="i"
@@ -121,21 +121,11 @@
 </template>
 
 <script>
-import authService from "../api/auth";
 import { mapState } from "vuex";
 export default {
-  async created() {
-    authService.checkSessionExpire().then((response) => {
-      if (response.data.status === 401) {
-        loggedOut = true
-      } else {
-        this.$store.dispatch("users/me", response.data);
-      }
-    });
-  },
   computed: {
     ...mapState({
-      user: (state) => state.users.user,
+      user: (state) => state.auth
     }),
   },
   data() {
@@ -200,8 +190,7 @@ export default {
   },
   methods: {
     async logout() {
-      await authService.logout();
-      this.$store.dispatch("users/logout", []);
+      await this.$auth.logout()
       this.$router.push({ path: "/" });
     },
   },
