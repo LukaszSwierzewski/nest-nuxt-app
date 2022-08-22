@@ -53,7 +53,7 @@
     >
       <v-list>
         <v-list-item
-          v-if='user.loggedIn'
+          v-if='loggedIn'
           exact
           @click="logout"
         >
@@ -77,7 +77,7 @@
               <v-list-item-title v-text="'Login/Register'" />
             </v-list-item-content>
           </v-list-item>
-        <span v-if='user.loggedIn'>
+        <span v-if='loggedIn'>
           <v-list-item
             v-for="(item, i) in protectedRoute"
             :key="i"
@@ -122,10 +122,12 @@
 
 <script>
 import { mapState } from "vuex";
+import state from "~/store/news/state";
 export default {
   computed: {
     ...mapState({
-      user: (state) => state.auth
+      user: (state) => state.auth.user,
+      loggedIn: (state) => state.auth.loggedIn
     }),
   },
   data() {

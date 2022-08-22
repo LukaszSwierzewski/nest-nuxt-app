@@ -12,7 +12,8 @@
         <Comment v-for="(comment, index) in blogData.comments" :key='index' :comment="comment" />
         </v-col>
         <v-col class="col-md-8 col-12">
-          <v-form v-if="user && user.id">
+          {{ user }}
+          <v-form v-if="loggedIn">
             <v-textarea
               filled
               v-model="addCommentData.comment_content"
@@ -68,7 +69,8 @@ export default {
   },
   computed: {
     ...mapState({
-      user: (state) => state.users.user,
+      loggedIn: (state) => state.auth.loggedIn,
+      user: (state) => state.auth.user
     }),
   },
   async asyncData({ params }) {

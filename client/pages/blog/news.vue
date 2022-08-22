@@ -114,7 +114,8 @@ export default {
   },
   async asyncData({ store, route }) {
     const blogs = await blogService.getPage(route.query);
-    store.dispatch("news/getBlogPage", blogs.data);
+    console.log(blogs)
+    store.dispatch("news/getBlogPage", {blogPage: blogs.data, blogPosts: blogs.data.data});
   },
   watchQuery: ["page"],
   watch: {
