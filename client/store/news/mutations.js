@@ -6,5 +6,8 @@ export default {
   },
   [types.ADD_SINGLE_BLOG_FROM_SOCKET](state, payload) {
     state.currentBlog?.data.unshift(payload)
+  },
+  [types.GET_CURRENT_PAGE_POSTS](state, payload) {
+    state.blogPosts = payload
   }
 };

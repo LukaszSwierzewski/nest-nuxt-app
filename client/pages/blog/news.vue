@@ -1,8 +1,9 @@
 <template>
     <div>
         <h1 class="blog_heading">News</h1>
+        <CustomPopup @onAction="deleteItem" @closeModal="closeChildModal" :modal-data="selectedModalData" v-if="!isEmpty(selectedModalData)" />
         <v-row justify="center" align="center">
-          <v-card v-for="(post, key) in news.data" :key="key" class="col-md-8 col-12 mb-5">
+          <v-card v-for="(post, key) in posts" :key="key" class="col-md-8 col-12 mb-5">
             <v-img
               class="white--text align-end"
               height="200px"
@@ -22,6 +23,7 @@
               <v-btn
                 color="orange"
                 text
+                @click="populateModal(post)"
               >
                 Share
               </v-btn>
@@ -48,15 +50,26 @@
 import blogService from "../../api/blog/blog";
 import { mapState } from "vuex";
 import useEvent from "@/composable/events.js";
+import CustomPopup from "~/components/CustomPopup.vue";
 export default {
   name: "blog-news",
+  components: {
+    CustomPopup,
+    CustomPopup
+},
   setup() {
     const { capacity, attending, spacesLeft, increaceCapacity } = useEvent();
     return { capacity, attending, spacesLeft, increaceCapacity };
   },
+  data () {
+    return {
+      selectedModalData: {}
+    }
+  },
   computed: {
     ...mapState({
       news: (state) => state.news.currentBlog,
+      posts: (state) => state.news.blogPosts
     }),
     currentPage() {
       return Number(this.$route.query.page)
@@ -75,8 +88,23 @@ export default {
     this.socket.on('msgToClient', (resp) => {
         this.$store.dispatch('news/getBlogFromSocket', resp)
     })
-},
+  },
   methods: {
+    deleteItem (payload) {
+    const newArr = this.posts.filter(object =>  object.id !== payload.id);
+      this.$store.dispatch("news/updateBlogPage", newArr)
+      this.selectedModalData = {}
+    },
+    closeChildModal (payload) {
+      this.selectedModalData = payload
+    },
+    isEmpty (obj) {
+      for (var x in obj) { return false; }
+      return true;
+    },
+    populateModal (data) {
+      this.selectedModalData = data
+    },
     routeChangeQuery(queryChange) {
       return Number(this.$route.query.page) + queryChange
     },

@@ -36,7 +36,7 @@
         class="acount__btn"
         @click.stop="rightDrawer = !rightDrawer"
       > 
-        <p v-if='user.user.username'>Hi, {{ user.user.username }}</p>
+        <p v-if='user && user.user && user.user.username'>Hi, {{ user.user.username }}</p>
         <v-icon>mdi-account</v-icon>
       </v-btn>
     </v-app-bar>
