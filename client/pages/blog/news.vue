@@ -3,6 +3,7 @@
         <h1 class="blog_heading">News</h1>
         <CustomPopup @onAction="deleteItem" @closeModal="closeChildModal" :modal-data="selectedModalData" v-if="!isEmpty(selectedModalData)" />
         <v-row justify="center" align="center">
+          <img src="hwdp.jpg" width="400" height="400" />
           <v-card v-for="(post, key) in posts" :key="key" class="col-md-8 col-12 mb-5">
             <v-img
               class="white--text align-end"

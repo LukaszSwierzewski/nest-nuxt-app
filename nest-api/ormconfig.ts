@@ -6,7 +6,7 @@ const config: MysqlConnectionOptions = {
     port: 3306,
     username: 'root',
     password: '',
-    database: 'local_db',
+    database: 'test_xd',
     entities: ['dist/src/**/*.entity.js'],
     synchronize: true
 }
