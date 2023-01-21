@@ -18,9 +18,8 @@ export class WorkerProductivityService {
     const userID = await this.usersRepository.findOneOrFail({
       id: createWorkerProductivityDto.user_id
     });
-    console.log('xdd')
     newOrder.worker = userID
-    newOrder.order_id = 'xdddddddddd'
+    newOrder.order_id = createWorkerProductivityDto.order_id
     return this.ProductivityOrderRepository.save(newOrder)
     
   }
