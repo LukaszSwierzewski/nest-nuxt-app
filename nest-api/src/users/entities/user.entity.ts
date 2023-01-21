@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Session } from './session.entity';
 import { Comment } from '../../comments/entities/comment.entity';
+import { ProductivityOrder } from 'src/worker-productivity/entities/worker-productivity.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -30,4 +31,6 @@ export class User {
   sessions: Session[];
   @OneToMany(() => Comment, (comment) => comment.author)
   comments: Comment[];
+  @OneToMany(() => ProductivityOrder, (order) => order.worker)
+  orders: ProductivityOrder[];
 }

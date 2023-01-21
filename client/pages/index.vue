@@ -9,6 +9,7 @@
 </template>
 <script>
 import useEvent from "@/composable/events.js";
+import workerService from '@/api/worker/worker'
 import useRequest from '@/composable/request.js';
 import { mapGetters } from 'vuex'
 export default {
@@ -25,6 +26,13 @@ export default {
   data () {
     return {
     }
+  },
+  created () {
+    const params = {
+      order_id: 'dshsdhfshfdhb',
+      user_id: 1
+    }
+    workerService.postOrder(params)
   },
   computed: {
     ...mapGetters({
